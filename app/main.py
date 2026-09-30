@@ -1,7 +1,23 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.db.session import get_db
+from app.models.user import User
 
 app = FastAPI()
+
+# ...
+
+
+@app.get("/users")
+async def list_users(db: AsyncSession = Depends(get_db)):
+    result = await db.scalars(select(User))
+    return result.all()
+
+
+# ...
 
 
 class Item(BaseModel):

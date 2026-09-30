@@ -4,6 +4,8 @@ services:
       # Sets the directory to look for Dockerfile
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - backend.env
     container_name: tabibito-backend
     ports:
       - "8000:8000"
