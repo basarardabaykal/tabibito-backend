@@ -4,7 +4,17 @@ services:
       # Sets the directory to look for Dockerfile
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - backend.env
     container_name: tabibito-backend
     ports:
       - "8000:8000"
+    restart: unless-stopped
+  database:
+    image: postgres:18-alpine
+    env_file:
+     - database.env
+    container_name: tabibito-database
+    ports:
+     - "5432:5432"
     restart: unless-stopped
