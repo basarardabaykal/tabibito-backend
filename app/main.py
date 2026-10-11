@@ -7,14 +7,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
 from app.models.user import User
+from app.schemas.user import UserCreate
 
 app = FastAPI()
 
 # ...
-
-
-class CreateUserRequest(BaseModel):
-    email: str
 
 
 @app.get("/users")
@@ -24,7 +21,7 @@ async def list_users(db: AsyncSession = Depends(get_db)):
 
 
 @app.post("/users")
-async def create_user(user: CreateUserRequest, db: AsyncSession = Depends(get_db)):
+async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
     new_user = User(
         email=user.email, created_at=datetime.now(), updated_at=datetime.now()
     )
