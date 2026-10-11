@@ -9,6 +9,8 @@ services:
     container_name: tabibito-backend
     ports:
       - "8000:8000"
+    volumes:
+      - .:/tabibito-backend
     restart: unless-stopped
   database:
     image: postgres:18-alpine
