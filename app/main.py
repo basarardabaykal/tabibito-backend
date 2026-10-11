@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import select
@@ -11,10 +13,24 @@ app = FastAPI()
 # ...
 
 
+class CreateUserRequest(BaseModel):
+    email: str
+
+
 @app.get("/users")
 async def list_users(db: AsyncSession = Depends(get_db)):
     result = await db.scalars(select(User))
     return result.all()
+
+
+@app.post("/users")
+async def create_user(user: CreateUserRequest, db: AsyncSession = Depends(get_db)):
+    new_user = User(
+        email=user.email, created_at=datetime.now(), updated_at=datetime.now()
+    )
+    db.add(new_user)
+    await db.commit()
+    return "Succesfully created a user."
 
 
 # ...
