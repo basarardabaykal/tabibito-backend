@@ -11,7 +11,7 @@ from app.schemas.entry import EntryCreate, EntryDelete, EntryUpdate
 router = APIRouter()
 
 
-@router.post("/entries")
+@router.post("/entry")
 async def create_entry(entry: EntryCreate, db: AsyncSession = Depends(get_db)):
     new_entry = Entry(
         title=entry.title,
