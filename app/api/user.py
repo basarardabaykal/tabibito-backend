@@ -1,27 +1,21 @@
-from datetime import datetime
-
 from fastapi import APIRouter, Depends
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.session import get_db
-from app.models.user import User
 from app.schemas.user import UserCreate
+from app.services.user import UserService, get_user_service
 
 router = APIRouter()
 
 
 @router.get("/users")
-async def list_users(db: AsyncSession = Depends(get_db)):
-    result = await db.scalars(select(User))
-    return result.all()
+async def read_users(service: UserService = Depends(get_user_service)):
+    result = await service.read_users()
+
+    return result
 
 
 @router.post("/users")
-async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
-    new_user = User(
-        email=user.email, created_at=datetime.now(), updated_at=datetime.now()
-    )
-    db.add(new_user)
-    await db.commit()
+async def create_user(
+    user_in: UserCreate, service: UserService = Depends(get_user_service)
+):
+    await service.create_user(user_in)
     return "Succesfully created a user."
