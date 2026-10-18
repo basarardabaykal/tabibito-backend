@@ -29,6 +29,7 @@ async def create_comment(comment: CommentCreate, db: AsyncSession = Depends(get_
 @router.get("/comments")
 async def read_comments(db: AsyncSession = Depends(get_db)):
     result = await db.scalars(select(Comment))
+
     return (result.all(),)
 
 
@@ -38,8 +39,9 @@ async def update_comment(comment: CommentUpdate, db: AsyncSession = Depends(get_
     if not comment_to_update:
         return "No comment with the given id found."
 
-    if comment.content:
-        comment_to_update.content = comment.content
+    update_data = comment.model_dump(exclude_defaults=True)
+    for key, value in update_data.items():
+        setattr(comment_to_update, key, value)
 
     await db.commit()
 
