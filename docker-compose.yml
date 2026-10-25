@@ -22,3 +22,12 @@ services:
     volumes:
      - ./pg_data:/var/lib/postgresql
     restart: unless-stopped
+  frontend:
+    build:
+      context: ../tabibito-frontend
+      dockerfile: Dockerfile
+    container_name: tabibito-frontend
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+
