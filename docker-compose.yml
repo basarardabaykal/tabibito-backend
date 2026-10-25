@@ -29,5 +29,8 @@ services:
     container_name: tabibito-frontend
     ports:
       - "5173:5173"
+    volumes:
+      - ../tabibito-frontend:/tabibito-frontend
+      - /tabibito-frontend/node_modules # separate container path
     restart: unless-stopped
 
