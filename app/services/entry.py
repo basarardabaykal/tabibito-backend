@@ -35,6 +35,15 @@ class EntryService:
             data=list(entries.all()),
         )
 
+    async def read_entry(self, id: int):
+        entry = await self.db.get(Entry, id)
+
+        return DetailedResult[Entry](
+            is_successful=True,
+            message="Successfully retrieved the entry.",
+            data=entry,
+        )
+
     async def update_entry(self, entry_in: EntryUpdate):
         entry_to_update = await self.db.get(Entry, entry_in.id)
         if not entry_to_update:

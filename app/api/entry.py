@@ -21,6 +21,13 @@ async def read_entries(service: EntryService = Depends(get_entry_service)):
     return result
 
 
+@router.get("/entry/{id}")
+async def read_entry(id: int, service: EntryService = Depends(get_entry_service)):
+    result = await service.read_entry(id)
+
+    return result
+
+
 @router.patch("/entry")
 async def update_entry(
     entry_in: EntryUpdate, service: EntryService = Depends(get_entry_service)
